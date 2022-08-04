@@ -11,11 +11,13 @@ tag: jekyll使用相关
 * content
 {:toc}
 '''
- 
-import os, sys
+
+import os
+import sys
 import time
 import re
- 
+
+
 class Create_newMD:
     def __init__(self):
         self.contentlist = ["---"]
@@ -27,7 +29,7 @@ class Create_newMD:
         self.categories_list = []
         # 存储所有文件的分类名
         self.tags_list = []
- 
+
     def create(self):
         self.path = "./_posts"
         if (not os.path.exists(self.path)):
@@ -38,31 +40,61 @@ class Create_newMD:
             # 先获取_posts目录下的所有文件
             filelist = os.listdir(self.path)
             for file in filelist:
-                with open(self.path+"/"+file,'r',encoding='utf-8')as f:
-                    # 不用死循环，如果找20行还没找到就不用找了
-                    switch = 0
-                    while switch <= 20:
-                        content = f.readline()
-                        # 获取分类
-                        if "categories: " in content:
-                            category_ = content.split("categories: ")[1].strip().replace("\n","")
-                            self.categories_list.append(category_)
-                        # 获取标签
-                        if "tag: " in content:
-                            tag_ = content.split("tag: ")[1].strip().replace("\n","")
-                            self.tags_list.append(tag_)
-                        # else:
-                            # 如果到了结尾就停止循环，这样太耗内存，一般20行以内就能确定分类和标签
-                        #     if not content:
-                        #         break
-                        switch += 1
-            all_categories = list(set(self.categories_list)) # 去掉重复的名字，并排序
+                # print(self.path +'/' + file + '\n')
+                if os.path.isdir(self.path + '/' + file):
+                    # print("diretory\n")
+                    inside_filelist = os.listdir(self.path + '/' + file)
+                    for inside_file in inside_filelist:
+                        with open(self.path + '/' + file+"/"+inside_file, 'r', encoding='utf-8')as f:
+                            # 不用死循环，如果找20行还没找到就不用找了
+                            switch = 0
+                            while switch <= 20:
+                                content = f.readline()
+                                # 获取分类
+                                if "categories: " in content:
+                                    category_ = content.split("categories: ")[
+                                        1].strip().replace("\n", "")
+                                    self.categories_list.append(category_)
+                                # 获取标签
+                                if "tag: " in content:
+                                    tag_ = content.split("tag: ")[
+                                        1].strip().replace("\n", "")
+                                    self.tags_list.append(tag_)
+                                # else:
+                                    # 如果到了结尾就停止循环，这样太耗内存，一般20行以内就能确定分类和标签
+                                #     if not content:
+                                #         break
+                                switch += 1
+                else:
+                    # print("file\n")
+                    with open(self.path+"/"+file, 'r', encoding='utf-8')as f:
+                        # 不用死循环，如果找20行还没找到就不用找了
+                        switch = 0
+                        while switch <= 20:
+                            content = f.readline()
+                            # 获取分类
+                            if "categories: " in content:
+                                category_ = content.split("categories: ")[
+                                    1].strip().replace("\n", "")
+                                self.categories_list.append(category_)
+                            # 获取标签
+                            if "tag: " in content:
+                                tag_ = content.split("tag: ")[
+                                    1].strip().replace("\n", "")
+                                self.tags_list.append(tag_)
+                            # else:
+                                # 如果到了结尾就停止循环，这样太耗内存，一般20行以内就能确定分类和标签
+                            #     if not content:
+                            #         break
+                            switch += 1
+            all_categories = list(set(self.categories_list))  # 去掉重复的名字，并排序
             all_categories.sort()
             all_tags = list(set(self.tags_list))
             all_tags.sort()
- 
+
             while True:
-                input_date = input("\n" + "文章发布日期(格式2019-02-21,不输入默认为当前日期):").strip()
+                input_date = input(
+                    "\n" + "文章发布日期(格式2019-02-21,不输入默认为当前日期):").strip()
                 re_date = self.date_patt.findall(input_date)
                 if input_date != '':
                     if len(re_date) != 0:
@@ -73,7 +105,8 @@ class Create_newMD:
                 else:
                     break
             while True:
-                input_time = input("\n" + "文章发布时间(格式07:08:00,不输入默认为当前时间):").strip()
+                input_time = input(
+                    "\n" + "文章发布时间(格式07:08:00,不输入默认为当前时间):").strip()
                 re_time = self.time_patt.findall(input_time)
                 if input_time != '':
                     if len(re_time) != 0:
@@ -87,14 +120,15 @@ class Create_newMD:
                 # 标题不能含特殊符号，否则博客js报错：Syntax error, unrecognized expression
                 input_title = input("\n" + "文章标题:").strip()
                 if input_title != "":
-                    out_title = input_title.replace("(","（").replace(")","）").replace(",","，").\
-                    replace("[","【").replace("]","】").replace("/","_").replace("%","_").replace("#","_").\
-                    replace("<", "《").replace(">", "》").replace("&", "_").replace("'", '"').replace("`", "_"). \
-                    replace("^", "_").replace("@", "_").replace("$", "_").replace("!", "！").replace("?", "？").replace(";", "；")
+                    out_title = input_title.replace("(", "（").replace(")", "）").replace(",", "，").\
+                        replace("[", "【").replace("]", "】").replace("/", "_").replace("%", "_").replace("#", "_").\
+                        replace("<", "《").replace(">", "》").replace("&", "_").replace("'", '"').replace("`", "_"). \
+                        replace("^", "_").replace(
+                            "@", "_").replace("$", "_").replace("!", "！").replace("?", "？").replace(";", "；")
                     title = "title: " + out_title
                     # 结尾不能是英文冒号
                     if title[-1] == ":":
-                        title = title.rsplit(":",1)[0] + "："
+                        title = title.rsplit(":", 1)[0] + "："
                     break
                 else:
                     print("\n" + "标题不能为空或只为空格，请重新输入！")
@@ -106,28 +140,31 @@ class Create_newMD:
                 print("{:^18}\t{:^12}".format(str(i + 1) + "-", chr))
                 categories_dic[str(i + 1) + "-"] = chr
             while True:
-                input_category = input("\n" + "输入文章分类名(可输入相应分类代号，注意后面的减号):").strip()
+                input_category = input(
+                    "\n" + "输入文章分类名(可输入相应分类代号，注意后面的减号):").strip()
                 if input_category != "":
                     # 如果输入的是纯数字，要加上双引号:"2"
                     if input_category.isdigit():
                         category = "categories: " + '"' + input_category + '"'
                     elif input_category in categories_dic.keys():
-                        category = "categories: " + categories_dic[input_category]
+                        category = "categories: " + \
+                            categories_dic[input_category]
                     else:
                         category = "categories: " + input_category
                     break
                 else:
                     print("\n" + "分类名不能为空或只为空格，请重新输入！")
                     continue
-            print("分类名为：%s"%category.split("categories: ")[1])
- 
+            print("分类名为：%s" % category.split("categories: ")[1])
+
             print("\n" + "===========已添加过的标签名如下===========")
             print("{:^15}\t{:^10}".format("标签代号", "标签名称"))
             tags_dic = {}
             for j, chr in enumerate(all_tags):
                 print("{:^18}\t{:^12}".format(str(j + 1) + "-", chr))
                 tags_dic[str(j + 1) + "-"] = chr
-            input_tag = input("\n" + "输入文章标签名(不输入默认为分类名或输入相应标签代号，注意后面的减号):").strip()
+            input_tag = input(
+                "\n" + "输入文章标签名(不输入默认为分类名或输入相应标签代号，注意后面的减号):").strip()
             if input_tag != "":
                 if input_tag in tags_dic.keys():
                     tag = "tag: " + tags_dic[input_tag]
@@ -139,7 +176,7 @@ class Create_newMD:
                 else:
                     tag = "tag: " + category.split("categories: ")[1]
             print("标签名为：%s" % tag.split("tag: ")[1])
- 
+
             # 获取当天的日期
             today_date = time.strftime("%Y-%m-%d", time.localtime())
             # 获取现在的时间
@@ -157,17 +194,18 @@ class Create_newMD:
             self.contentlist.append(mathjax)
             self.contentlist.append("---")
             self.contentlist.append("\n# " + out_title)
-            
-            char_list = ['*','|',':','?','/','<','>','"','\\']
+
+            char_list = ['*', '|', ':', '?', '/', '<', '>', '"', '\\']
             while True:
                 # 创建文件的时候，名字不能包含一些特殊字符要转义
-                url = input("\n" + "md文件名(也是文章url地址名称,不输入默认为标题名字(特殊符号用_代替)):").strip()
+                url = input(
+                    "\n" + "md文件名(也是文章url地址名称,不输入默认为标题名字(特殊符号用_代替)):").strip()
                 if url == "":
                     url = input_title
                 for i in char_list:
-                    if i in url :
-                        print("'%s'包含特殊符号'%s'已转义！"%(url,i))
-                        url = url.replace(i,"_")
+                    if i in url:
+                        print("'%s'包含特殊符号'%s'已转义！" % (url, i))
+                        url = url.replace(i, "_")
                 fileName = input_date + "-" + url + ".md"
                 if fileName in filelist:
                     print("\n" + "ERROR:该md文件'%s'已存在,创建失败！" % fileName)
@@ -190,6 +228,8 @@ class Create_newMD:
                     print("\n" + "5秒后自动退出系统...")
                     time.sleep(5)
                     break
+
+
 if __name__ == "__main__":
     cr = Create_newMD()
     cr.create()
