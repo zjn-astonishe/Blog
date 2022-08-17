@@ -86,9 +86,9 @@ avatar:
 # Disable all banner image
 disable_top_img: false
 # The banner image of home page
-index_img: https://cdn.jsdelivr.net/gh/zjn-astonishe/cdn@1.2.2/picture/1.jpg
+index_img: https://cdn.jsdelivr.net/gh/zjn-astonishe/cdn@1.2.2/picture/916448.jpg
 # If the banner of page not setting, it will show the top_img
-default_top_img: https://cdn.jsdelivr.net/gh/zjn-astonishe/cdn@1.2.2/picture/3.jpg
+default_top_img: https://cdn.jsdelivr.net/gh/zjn-astonishe/cdn@1.3.0/picture/7.png
 
 
 # The banner image of archive page
@@ -96,7 +96,7 @@ archive_img: https://cdn.jsdelivr.net/gh/zjn-astonishe/cdn@1.2.2/picture/2.jpg
 
 # If the banner of tag page not setting, it will show the top_img
 # note: tag page, not tags page (子標籤頁面的 top_img)
-tag_img: https://cdn.jsdelivr.net/gh/zjn-astonishe/cdn@1.2.2/picture/4.jpg
+tag_img: https://cdn.jsdelivr.net/gh/zjn-astonishe/cdn@1.2.2/picture/3.jpg
 
 # The banner image of tag page
 # format:
